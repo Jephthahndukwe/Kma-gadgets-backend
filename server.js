@@ -47,6 +47,11 @@ app.use('/api/v1/product', newFeature);
 app.use('/api/v1/product', trendingProduct);
 app.use('/api/v1/banner', banner);
 
+
+//brands
+app.use('/api/v1/apple',apple)
+
+
 //rest api
 app.get('/', (req, res) => {
     res.send({
