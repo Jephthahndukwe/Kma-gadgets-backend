@@ -9,6 +9,23 @@ import newFeature from './route/newFeature.js'
 import trendingProduct from './route/trendingProduct.js'
 import banner from './route/banner.js'
 
+//Brands routes
+import apple from "./route/brands/apple.js"
+import gionee from "./route/brands/gionee.js"
+import huawei from "./route/brands/huawei.js"
+import infinix from "./route/brands/infinix.js"
+import itel from "./route/brands/itel.js"
+import oneplus from "./route/brands/oneplus.js"
+import oppo from "./route/brands/oppo.js"
+import redimi from "./route/brands/redimi.js"
+import samsung from "./route/brands/samsung.js"
+import techno from "./route/brands/techno.js"
+import vivo from "./route/brands/vivo.js"
+
+
+
+
+
 
 //configure env
 dotenv.config({path: "./config/.env"});
