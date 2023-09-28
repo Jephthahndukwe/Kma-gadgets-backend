@@ -131,14 +131,10 @@ const xiaomiSchema = mongoose.Schema({
             popularity:{type:String}
         }
     ],
-    
-    createdAt:{
-    type:Date,
-    default:Date.now,
-    }
+  
     
 
-})
+},{timestamps:true})
 
 
 

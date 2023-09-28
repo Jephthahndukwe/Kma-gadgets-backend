@@ -131,13 +131,9 @@ const huaweiSchema = mongoose.Schema({
         }
     ],
     
-    createdAt:{
-    type:Date,
-    default:Date.now,
-    }
-    
+   
 
-})
+},{timestamps:true})
 
 
 
