@@ -59,7 +59,7 @@ export const getAdminBannerController = async (req, res, next) => {
             success: true,
             banners
         })
-    }, 8000);
+    }, 5000);
 }
 
 //Update banner (Admin)  => /api/v1/product/admin/banner/:id

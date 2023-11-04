@@ -3,15 +3,19 @@ import validator from 'validator'
 import crypto from 'crypto'
 
 const userSchema = new mongoose.Schema({
+    userName: {
+        type: String,
+        required: [true,"Please enter your username"], 
+        maxLength: [30, "username cannot exceed 30 characters"],
+        minLength: [3, "username cannot be less than three characters"]
+      },
     firstName: {
         type: String,
-        required: [true,"Please enter your first name"], 
         maxLength: [30, "first name cannot exceed 30 characters"],
         minLength: [3, "first name cannot be less than three characters"]
       },
       lastName: {
         type: String,
-        required: [true,"Please enter your last name"], 
         maxLength: [30, "last name cannot exceed 30 characters"],
         minLength: [3, "last name cannot be less than three characters"]
       },

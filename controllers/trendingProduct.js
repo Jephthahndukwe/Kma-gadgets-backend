@@ -3,14 +3,14 @@ import trendingModel from "../models/trendingModel.js"
 
 //Create Trending product (Admin) => /api/v1/admin/trending-product/new
 export const createTrendingProductController = async(req,res) => {
-    const product = await trendingModel.create(req.body)
+    const trending = await trendingModel.create(req.body)
     
     try {
-        if(product){
+        if(trending){
             res.status(200).send({
                 success: true,
                 message: "Trending Product created successfully",
-                product
+                trending
             })
         }
     }  catch (error) {
@@ -25,17 +25,17 @@ export const createTrendingProductController = async(req,res) => {
 
 //Get all Trending product => /api/v1/product/trending-products
 export const getTrendingProductController = async(req, res) => {
-    const products = await trendingModel.find({})
+    const trendings = await trendingModel.find({})
     const productsCount = await trendingModel.countDocuments();
     
     try {
-        if(products){
+        if(trendings){
             setTimeout(() => {
                 res.json({
                     success: true,
                     message:"All products retrieved",
                     productsCount,
-                    products
+                    trendings
                 })
             }, 5000)
         }
@@ -52,27 +52,27 @@ export const getTrendingProductController = async(req, res) => {
 //Get all product (Admin) => /api/v1/product/admin/trending-products
 export const getAdminTrendingProductController = async (req, res, next) => {
         
-    const products = await trendingModel.find();
+    const trendings = await trendingModel.find();
 
     setTimeout(() => {
         res.status(200).json({
             success: true,
-            products
+            trendings
         })
     }, 8000);
 }
 
 //Get single Trending product details   => /api/v1/product/trending-product/:id
 export const getSingleTrendingProductController = async(req, res, next) => {
-    const product = await trendingModel.findById(req.params.id);
+    const trending = await trendingModel.findById(req.params.id);
     try {
         res.status(200).json({
             success: true,
-            product
+            trending
         })
     } catch (error) {
         console.log(error)
-        if(!product) {
+        if(!trending) {
             res.status(404).send({
                 success: false,
                 message: 'Product not found',
@@ -84,10 +84,10 @@ export const getSingleTrendingProductController = async(req, res, next) => {
 
 //Update Trending Product (Admin)  => /api/v1/product/admin/trending-product/:id
 export const updateTrendingProductController = async(req, res, next) => {
-    let product = await trendingModel.findById(req.params.id);
+    let trending = await trendingModel.findById(req.params.id);
 
     try {
-        product = await trendingModel.findByIdAndUpdate(req.params.id, req.body, {
+        trending = await trendingModel.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true,
             useFindAndModify: false,
@@ -96,11 +96,11 @@ export const updateTrendingProductController = async(req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Product updated successfully",
-            product
+            trending
         });
     } catch (error) {
         console.log(error)
-        if (!product) {
+        if (!trending) {
             console.log(error)
             res.status(404).send({
                 success: false,
@@ -113,7 +113,7 @@ export const updateTrendingProductController = async(req, res, next) => {
 
 //Delete Trending Product (Admin)  => /api/v1/product/admin/trending-product/:id
 export const deleteTrendingProductController = async(req, res, next) => {
-    const product = await trendingModel.findByIdAndDelete(req.params.id);
+    const trending = await trendingModel.findByIdAndDelete(req.params.id);
 
     try {
         res.status(200).json({
@@ -122,7 +122,7 @@ export const deleteTrendingProductController = async(req, res, next) => {
         })
     } catch (error) {
         console.log(error)
-        if (!product) {
+        if (!trending) {
             res.status(404).send({
                 success: false,
                 message: 'Product not found',

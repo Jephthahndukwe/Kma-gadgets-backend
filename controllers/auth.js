@@ -3,10 +3,11 @@ import { comparePassword, hashPassword } from './../helpers/auth.js'
 import JWT from 'jsonwebtoken';
 import crypto from 'crypto'
 import {sendEmail} from '../helpers/sendEmail.js'
+import bcrypt from 'bcrypt'
 
 export const registerController = async (req, res) => {
     try {
-        const { firstName, lastName, email, password } = req.body
+        const { userName, email, password } = req.body
 
         //check user
         const existingUser = await userModel.findOne({ email })
@@ -14,7 +15,7 @@ export const registerController = async (req, res) => {
         //existing user
         if (existingUser) {
             return res.status(200).send({
-                success: true,
+                success: false,
                 message: 'Already Registered please login',
             })
         }
@@ -23,17 +24,16 @@ export const registerController = async (req, res) => {
 
         //save
         const user = await new userModel({
-            firstName,
-            lastName,
+            userName,
             email,
-            password: hashedPassword
+            password: hashedPassword,
         }).save()
 
         res.status(201).send({
             success: true,
             message: 'User Registered Successfully',
             user,
-        })
+        });
     }
     catch (error) {
         console.log(error)
@@ -95,13 +95,6 @@ export const forgotPasswordController = async (req, res) => {
    try {
     const user = await userModel.findOne({ email: req.body.email });
 
-    if(!user) {
-        return res.status(404).send({
-            success: false,
-            message: 'User not found with this email'
-        })
-    }
-
     //Get reset token
     const resetToken = user.getResetPasswordToken();
 
@@ -130,14 +123,22 @@ export const forgotPasswordController = async (req, res) => {
 
            await user.save({ validateBeforeSave: false });
 
-           return res.status(500).send({
-            success: false,
-            message: 'User not found with this email'
-        })
+           if(!user) {
+            return res.status(404).send({
+                success: false,
+                message: 'User not found with this email'
+            })
+        }
+        
         }
 
    } catch (error) {
-    
+    console.log(error)
+        res.status(500).send({
+            success: false,
+            message: 'Error in login',
+            error
+        })
    }
 }
 
@@ -177,6 +178,76 @@ export const resetPasswordController = async (req, res, next) => {
         success: true,
         user,
         token
+    })
+}
+
+// Get currently logged in use  => /api/v1/auth/me
+export const getUserProfile = async (req, res, next) => {
+    const user = await userModel.findById(req.user._id);
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+}
+
+// Update / Change password => /api/v1/auth/password/update
+export const updateUserPassword = async (req, res, next) => {
+    const user = await userModel.findById(req.user._id)
+
+    // Check previous user password
+    const isMatched = await bcrypt.comparePassword(req.body.oldPassword);
+    console.log(isMatched)
+    if(!isMatched) {
+        return res.status(401).send({
+            success: false,
+            message: 'Old password is incorrect'
+        })
+    }
+
+    user.password = req.body.password;
+    await user.save();
+
+    res.status(200).send({
+        success: true,
+        message: 'Password updated successfully',
+        user,
+        token
+    })
+}
+
+// Update user profile => /api/v1/me/auth/update
+export const updateUserProfile = async (req, res, next) => {
+    const newUserData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone
+    }
+
+    const user = await userModel.findByIdAndUpdate(req.user._id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+    })
+
+    res.status(200).json({
+        success: true,
+        message: "Profile updated successfully",
+        user
+    })
+}
+
+//Logout User => /api/v1/auth/logout
+export const logoutUser = async (req, res, next) => {
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    })
+
+    res.status(200).json({
+        status:'success',
+        message: 'Logged Out',
     })
 }
 

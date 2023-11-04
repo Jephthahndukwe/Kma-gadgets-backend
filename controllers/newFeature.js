@@ -2,14 +2,14 @@ import newFeatureModel from "../models/newFeatureModel.js";
 
 //Create new feature product (Admin) => /api/v1/admin/feature-product/new
 export const createNewFeatureController = async(req,res) => {
-    const product = await newFeatureModel.create(req.body)
+    const feature = await newFeatureModel.create(req.body)
     
     try {
-        if(product){
+        if(feature){
             res.status(200).send({
                 success: true,
                 message: "New Feature Product created successfully",
-                product
+                feature
             })
         }
     }  catch (error) {
@@ -24,17 +24,17 @@ export const createNewFeatureController = async(req,res) => {
 
 //Get all new feature product => /api/v1/product/feature-products
 export const getNewFeatureController = async(req, res) => {
-    const products = await newFeatureModel.find({})
+    const features = await newFeatureModel.find({})
     const productsCount = await newFeatureModel.countDocuments();
     
     try {
-        if(products){
+        if(features){
             setTimeout(() => {
                 res.json({
                     success: true,
                     message:"All products retrieved",
                     productsCount,
-                    products
+                    features
                 })
             }, 5000)
         }
@@ -51,27 +51,27 @@ export const getNewFeatureController = async(req, res) => {
 //Get all product (Admin) => /api/v1/product/admin/feature-products
 export const getAdminNewFeatureController = async (req, res, next) => {
         
-    const products = await newFeatureModel.find();
+    const features = await newFeatureModel.find();
 
     setTimeout(() => {
         res.status(200).json({
             success: true,
-            products
+            features
         })
     }, 8000);
 }
 
 //Get single new feature product details   => /api/v1/product/feature-product/:id
 export const getSingleNewFeatureController = async(req, res, next) => {
-    const product = await newFeatureModel.findById(req.params.id);
+    const feature = await newFeatureModel.findById(req.params.id);
     try {
         res.status(200).json({
             success: true,
-            product
+            feature
         })
     } catch (error) {
         console.log(error)
-        if(!product) {
+        if(!feature) {
             res.status(404).send({
                 success: false,
                 message: 'Product not found',
@@ -83,10 +83,10 @@ export const getSingleNewFeatureController = async(req, res, next) => {
 
 //Update New Feature Product (Admin)  => /api/v1/product/admin/feature-product/:id
 export const updateNewFeatureController = async(req, res, next) => {
-    let product = await newFeatureModel.findById(req.params.id);
+    let feature = await newFeatureModel.findById(req.params.id);
 
     try {
-        product = await newFeatureModel.findByIdAndUpdate(req.params.id, req.body, {
+        feature = await newFeatureModel.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true,
             useFindAndModify: false,
@@ -95,11 +95,11 @@ export const updateNewFeatureController = async(req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Product updated successfully",
-            product
+            feature
         });
     } catch (error) {
         console.log(error)
-        if (!product) {
+        if (!feature) {
             console.log(error)
             res.status(404).send({
                 success: false,
@@ -112,7 +112,7 @@ export const updateNewFeatureController = async(req, res, next) => {
 
 //Delete New Feature Product (Admin)  => /api/v1/product/admin/feature-product/:id
 export const deleteNewFeatureController = async(req, res, next) => {
-    const product = await newFeatureModel.findByIdAndDelete(req.params.id);
+    const feature = await newFeatureModel.findByIdAndDelete(req.params.id);
 
     try {
         res.status(200).json({
@@ -121,7 +121,7 @@ export const deleteNewFeatureController = async(req, res, next) => {
         })
     } catch (error) {
         console.log(error)
-        if (!product) {
+        if (!feature) {
             res.status(404).send({
                 success: false,
                 message: 'Product not found',
