@@ -12,7 +12,7 @@ router.get('/products', getProductController);
 
 router.get('/admin/products', requireSignIn, isAdmin, getAdminProductsController);
 
-router.get('/product/:slug', getSingleProductController);
+router.get('/product/:id', getSingleProductController);
 
 router.put('/admin/product/:id', requireSignIn, isAdmin, updateProductController);
 

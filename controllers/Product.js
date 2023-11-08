@@ -85,13 +85,12 @@ export const getAdminProductsController = async (req, res, next) => {
 
 //Get single product details   => /api/v1/product/product/:id
 export const getSingleProductController = async (req, res, next) => {
-    const product = await ProductModel.findOne({ slug: req.params.slug })
-    
+    const product = await ProductModel.findById(req.params.id)
+
     try {
         res.status(200).json({
             success: true,
-            message: "Single product fetched",
-            product
+            product,
         })
     } catch (error) {
         console.log(error)
